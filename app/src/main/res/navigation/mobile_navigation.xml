@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.adamthiede.inkmusic.ui.playing.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:name="com.adamthiede.inkmusic.ui.nowplaying.NowPlayingFragment"
+        android:label="@string/title_nowplaying"
+        tools:layout="@layout/fragment_nowplaying" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.adamthiede.inkmusic.ui.artists.ArtistFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:name="com.adamthiede.inkmusic.ui.artists.ArtistsFragment"
+        android:label="@string/title_artists"
+        tools:layout="@layout/fragment_artists" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.adamthiede.inkmusic.ui.songs.SongsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:label="@string/title_songs"
+        tools:layout="@layout/fragment_songs" />
 </navigation>

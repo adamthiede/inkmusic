@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.adamthiede.inkmusic.databinding.FragmentNotificationsBinding
+import com.adamthiede.inkmusic.databinding.FragmentSongsBinding
 
 class SongsFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
+    private var _binding: FragmentSongsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,10 +25,10 @@ class SongsFragment : Fragment() {
         val songsViewModel =
             ViewModelProvider(this).get(SongsViewModel::class.java)
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        _binding = FragmentSongsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textNotifications
+        val textView: TextView = binding.textSongs
         songsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }

@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.adamthiede.inkmusic.databinding.FragmentDashboardBinding
+import com.adamthiede.inkmusic.databinding.FragmentArtistsBinding
 
-class ArtistFragment : Fragment() {
+class ArtistsFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentArtistsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class ArtistFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val artistViewModel =
-            ViewModelProvider(this).get(ArtistViewModel::class.java)
+        val artistsViewModel =
+            ViewModelProvider(this).get(ArtistsViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentArtistsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        artistViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textArtists
+        artistsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root
