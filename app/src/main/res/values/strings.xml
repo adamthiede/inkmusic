@@ -2,5 +2,6 @@
     <string name="app_name">inkmusic</string>
     <string name="title_nowplaying">Playing</string>
     <string name="title_artists">Artists</string>
+    <string name="title_albums">Albums</string>
     <string name="title_songs">Songs</string>
 </resources>

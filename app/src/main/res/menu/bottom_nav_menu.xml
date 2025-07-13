@@ -12,6 +12,11 @@
         android:title="@string/title_artists" />
 
     <item
+        android:id="@+id/navigation_albums"
+        android:icon="@drawable/albums"
+        android:title="@string/title_albums" />
+
+    <item
         android:id="@+id/navigation_songs"
         android:icon="@drawable/songs"
         android:title="@string/title_songs" />

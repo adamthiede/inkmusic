@@ -1,13 +1,13 @@
-package com.adamthiede.inkmusic.ui.nowplaying
+package com.adamthiede.inkmusic.ui.albums
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NowPlayingViewModel : ViewModel() {
+class AlbumsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+        value = "Albums"
     }
     val text: LiveData<String> = _text
 }
