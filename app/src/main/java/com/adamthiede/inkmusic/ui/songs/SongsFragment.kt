@@ -57,7 +57,7 @@ class SongsFragment : Fragment() {
 
         songsViewModel.songs.observe(viewLifecycleOwner) { songList ->
             songs = songList
-            adapter.notifyDataSetChanged()
+            adapter.setSongs(songList)
         }
 
         if (checkAndRequestPermission()) {

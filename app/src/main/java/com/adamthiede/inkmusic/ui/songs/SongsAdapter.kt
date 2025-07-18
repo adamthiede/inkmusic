@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.adamthiede.inkmusic.R
-import com.adamthiede.inkmusic.model.Song
+import com.adamthiede.inkmusic.model.*
 
 class SongsAdapter(
-    private val songs: List<Song>,
+    private var songs: List<Song>,
     private val onSongClick: (Int) -> Unit
 ) : RecyclerView.Adapter<SongsAdapter.SongViewHolder>() {
 
@@ -32,5 +32,10 @@ class SongsAdapter(
     }
 
     override fun getItemCount(): Int = songs.size
+
+    fun setSongs(newSongs: List<Song>) {
+        songs = newSongs
+        notifyDataSetChanged()
+    }
 }
 
