@@ -84,9 +84,14 @@ class SongsFragment : Fragment() {
 
     private fun playSong(index: Int) {
         if (index < 0 || index >= songs.size) return
+        val song=songs[index]
         val intent = Intent(requireContext(), MusicService::class.java).apply {
             action = MusicService.ACTION_START
-            putExtra(MusicService.SONG_URI, songs[index].uri)
+            putExtra(MusicService.SONG_URI, song.uri)
+            putExtra("SONG_TITLE", song.title)
+            putExtra("SONG_ARTIST", song.artist)
+            //logcat song name
+            println("Playing song: ${song.title} by ${song.artist}")
         }
         requireContext().startService(intent)
     }

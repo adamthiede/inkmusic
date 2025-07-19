@@ -9,7 +9,7 @@
         android:id="@+id/song_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Song Title"
+        android:text="SONG_NAME"
         android:textSize="22sp"
         android:paddingBottom="32dp"/>
 
@@ -17,13 +17,13 @@
         android:id="@+id/artist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Artist Name"
+        android:text="ARTIST_NAME"
         android:textSize="22sp"
         android:paddingBottom="32dp"/>
 
     <Button
         style="@style/CustomButton"
-        android:id="@+id/play_pause"
+        android:id="@+id/playpausebutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Play"
@@ -38,7 +38,7 @@
 
         <Button
             style="@style/CustomButton"
-            android:id="@+id/previous"
+            android:id="@+id/previousbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Prev"
@@ -47,7 +47,7 @@
 
         <Button
             style="@style/CustomButton"
-            android:id="@+id/next"
+            android:id="@+id/nextbutton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next"
@@ -55,6 +55,7 @@
     </LinearLayout>
     <Button
         style="@style/CustomButton"
+        android:id="@+id/stopbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop"

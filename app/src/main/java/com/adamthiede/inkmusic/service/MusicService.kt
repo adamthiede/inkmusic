@@ -17,9 +17,19 @@ class MusicService : Service() {
         const val SONG_URI = "SONG_URI"
     }
     private var mediaPlayer: MediaPlayer? = null
+    private var lastTitle: String = ""
+    private var lastArtist: String = ""
+
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
+            "com.adamthiede.inkmusic.QUERY_NOW_PLAYING" -> {
+                // Handle query for now playing song
+                val updateIntent = Intent("com.adamthiede.inkmusic.UPDATE_NOW_PLAYING")
+                updateIntent.putExtra("SONG_TITLE", lastTitle)
+                updateIntent.putExtra("SONG_ARTIST", lastArtist)
+                sendBroadcast(updateIntent)
+            }
             ACTION_START -> {
                 val songUri = intent.getStringExtra(SONG_URI)?.toUri()
                 if (songUri != null) {
@@ -27,6 +37,19 @@ class MusicService : Service() {
                     mediaPlayer = MediaPlayer.create(this, songUri)
                     mediaPlayer?.setOnCompletionListener { stopSelf() }
                     mediaPlayer?.start()
+
+                    //logcat song name
+                    // Assuming the song title and artist are passed in the intent
+                    println("Playing song: ${intent.getStringExtra("SONG_TITLE")}, Artist: ${intent.getStringExtra("SONG_ARTIST")}")
+                    val title = intent.getStringExtra("SONG_TITLE") ?: ""
+                    val artist = intent.getStringExtra("SONG_ARTIST") ?: ""
+                    lastTitle = title
+                    lastArtist = artist
+                    val updateIntent = Intent("com.adamthiede.inkmusic.UPDATE_NOW_PLAYING").apply {
+                        putExtra("SONG_TITLE", title)
+                        putExtra("SONG_ARTIST", artist)
+                    }
+                    sendBroadcast(updateIntent)
                 }
             }
             ACTION_PLAY -> mediaPlayer?.start()
@@ -39,6 +62,7 @@ class MusicService : Service() {
         }
         return START_STICKY
     }
+
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer?.release()

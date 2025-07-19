@@ -1,53 +1,86 @@
+// File: app/src/main/java/com/adamthiede/inkmusic/ui/nowplaying/NowPlayingFragment.kt
 package com.adamthiede.inkmusic.ui.nowplaying
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.adamthiede.inkmusic.databinding.FragmentNowplayingBinding
 import com.adamthiede.inkmusic.service.MusicService
-import android.content.Intent
 
 class NowPlayingFragment : Fragment() {
 
     private var _binding: FragmentNowplayingBinding? = null
-
     private val binding get() = _binding!!
+    private var isPlaying = false
+
+    private val nowPlayingReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(context: android.content.Context?, intent: Intent?) {
+            val title = intent?.getStringExtra("SONG_TITLE") ?: ""
+            val artist = intent?.getStringExtra("SONG_ARTIST") ?: ""
+            //logcat song name
+            println("NOW PLAYING RECEIVER: Received update for now playing song")
+            println("Title: $title, Artist: $artist")
+            binding.songTitle.text = title
+            binding.artistName.text = artist
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ):View {
+    ): View {
         _binding = FragmentNowplayingBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        binding.playPause.setOnClickListener {
-            val action = MusicService.ACTION_PLAY // or toggle with PAUSE
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        super.onViewCreated(view, savedInstanceState)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            nowPlayingReceiver,
+            IntentFilter("com.adamthiede.inkmusic.UPDATE_NOW_PLAYING"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+
+        binding.playpausebutton.setOnClickListener {
+            val action = if (isPlaying) MusicService.ACTION_PAUSE else MusicService.ACTION_PLAY
             val intent = Intent(requireContext(), MusicService::class.java).apply { this.action = action }
             requireContext().startService(intent)
+            isPlaying = !isPlaying
+            binding.playpausebutton.text = if (isPlaying) "Pause" else "Play"
         }
-        binding.previous.setOnClickListener {
+        binding.previousbutton.setOnClickListener {
             val intent = Intent(requireContext(), MusicService::class.java).apply { action = MusicService.ACTION_PREV }
             requireContext().startService(intent)
         }
-        binding.next.setOnClickListener {
+        binding.nextbutton.setOnClickListener {
             val intent = Intent(requireContext(), MusicService::class.java).apply { action = MusicService.ACTION_NEXT }
             requireContext().startService(intent)
         }
-        binding.root.findViewById<View>(android.R.id.button1)?.setOnClickListener {
+        binding.stopbutton.setOnClickListener {
             val intent = Intent(requireContext(), MusicService::class.java).apply { action = MusicService.ACTION_STOP }
             requireContext().startService(intent)
+            isPlaying = false
+            binding.playpausebutton.text = "Play"
         }
 
-        return root
+        val queryIntent = Intent("com.adamthiede.inkmusic.QUERY_NOW_PLAYING")
+        requireContext().sendBroadcast(queryIntent)
+        requireActivity().applicationContext.sendBroadcast(queryIntent)
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        requireContext().unregisterReceiver(nowPlayingReceiver)
+        requireActivity().applicationContext.unregisterReceiver(nowPlayingReceiver)
         _binding = null
     }
 }
