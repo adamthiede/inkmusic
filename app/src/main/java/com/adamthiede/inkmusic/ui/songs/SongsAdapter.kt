@@ -18,6 +18,10 @@ class SongsAdapter(
         val artist: TextView = itemView.findViewById(R.id.song_artist)
     }
 
+//    itemView.setOnClickListener {
+//        viewModel.playSong(song)
+//    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SongViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_song, parent, false)
