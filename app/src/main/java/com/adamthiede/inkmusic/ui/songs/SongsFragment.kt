@@ -1,6 +1,7 @@
 package com.adamthiede.inkmusic.ui.songs
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.adamthiede.inkmusic.databinding.FragmentSongsBinding
 import com.adamthiede.inkmusic.model.Song
 import com.adamthiede.inkmusic.ui.songs.SongsAdapter
+import com.adamthiede.inkmusic.service.MusicService
 import androidx.core.net.toUri
 
 class SongsFragment : Fragment() {
@@ -82,14 +84,11 @@ class SongsFragment : Fragment() {
 
     private fun playSong(index: Int) {
         if (index < 0 || index >= songs.size) return
-        currentSongIndex = index
-        mediaPlayer?.release()
-        val songUri = songs[index].uri.toUri()
-        mediaPlayer = MediaPlayer.create(context, songUri)
-        mediaPlayer?.setOnCompletionListener {
-            playSong(currentSongIndex + 1)
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            action = MusicService.ACTION_START
+            putExtra(MusicService.SONG_URI, songs[index].uri)
         }
-        mediaPlayer?.start()
+        requireContext().startService(intent)
     }
 
     override fun onDestroyView() {
