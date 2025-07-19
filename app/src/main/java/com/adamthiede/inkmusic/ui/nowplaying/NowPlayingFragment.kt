@@ -20,8 +20,8 @@ class NowPlayingFragment : Fragment() {
 
     private val nowPlayingReceiver = object : android.content.BroadcastReceiver() {
         override fun onReceive(context: android.content.Context?, intent: Intent?) {
-            val title = intent?.getStringExtra("SONG_TITLE") ?: ""
-            val artist = intent?.getStringExtra("SONG_ARTIST") ?: ""
+            val title = intent?.getStringExtra("SONG_TITLE") ?: "Unknown Song"
+            val artist = intent?.getStringExtra("SONG_ARTIST") ?: "Unknown Artist"
             //logcat song name
             println("NOW PLAYING RECEIVER: Received update for now playing song")
             println("Title: $title, Artist: $artist")
@@ -45,11 +45,20 @@ class NowPlayingFragment : Fragment() {
         ContextCompat.registerReceiver(
             requireContext(),
             nowPlayingReceiver,
-            IntentFilter("com.adamthiede.inkmusic.UPDATE_NOW_PLAYING"),
-            ContextCompat.RECEIVER_NOT_EXPORTED
+            IntentFilter(MusicService.UPDATE_NOW_PLAYING),
+            ContextCompat.RECEIVER_EXPORTED
         )
 
+        //logcat
+        println("NowPlayingFragment: onViewCreated called, registering receiver for now playing updates")
+
+
+        val queryIntent = Intent(MusicService.QUERY_NOW_PLAYING)
+        requireContext().sendBroadcast(queryIntent)
+
         binding.playpausebutton.setOnClickListener {
+            MusicService.QUERY_NOW_PLAYING
+            MusicService.UPDATE_NOW_PLAYING
             val action = if (isPlaying) MusicService.ACTION_PAUSE else MusicService.ACTION_PLAY
             val intent = Intent(requireContext(), MusicService::class.java).apply { this.action = action }
             requireContext().startService(intent)
@@ -71,16 +80,11 @@ class NowPlayingFragment : Fragment() {
             binding.playpausebutton.text = "Play"
         }
 
-        val queryIntent = Intent("com.adamthiede.inkmusic.QUERY_NOW_PLAYING")
-        requireContext().sendBroadcast(queryIntent)
-        requireActivity().applicationContext.sendBroadcast(queryIntent)
-
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         requireContext().unregisterReceiver(nowPlayingReceiver)
-        requireActivity().applicationContext.unregisterReceiver(nowPlayingReceiver)
         _binding = null
     }
 }

@@ -14,6 +14,8 @@ class MusicService : Service() {
         const val ACTION_NEXT = "com.adamthiede.inkmusic.NEXT"
         const val ACTION_PREV = "com.adamthiede.inkmusic.PREV"
         const val ACTION_START = "com.adamthiede.inkmusic.START"
+        const val QUERY_NOW_PLAYING = "com.adamthiede.inkmusic.QUERY_NOW_PLAYING"
+        const val UPDATE_NOW_PLAYING = "com.adamthiede.inkmusic.UPDATE_NOW_PLAYING"
         const val SONG_URI = "SONG_URI"
     }
     private var mediaPlayer: MediaPlayer? = null
@@ -23,9 +25,10 @@ class MusicService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
-            "com.adamthiede.inkmusic.QUERY_NOW_PLAYING" -> {
+            QUERY_NOW_PLAYING -> {
                 // Handle query for now playing song
-                val updateIntent = Intent("com.adamthiede.inkmusic.UPDATE_NOW_PLAYING")
+                println("MusicService: QUERY_NOW_PLAYING action received")
+                val updateIntent = Intent(UPDATE_NOW_PLAYING)
                 updateIntent.putExtra("SONG_TITLE", lastTitle)
                 updateIntent.putExtra("SONG_ARTIST", lastArtist)
                 sendBroadcast(updateIntent)
@@ -40,12 +43,12 @@ class MusicService : Service() {
 
                     //logcat song name
                     // Assuming the song title and artist are passed in the intent
-                    println("Playing song: ${intent.getStringExtra("SONG_TITLE")}, Artist: ${intent.getStringExtra("SONG_ARTIST")}")
+                    println("MusicService: Playing song: ${intent.getStringExtra("SONG_TITLE")}, Artist: ${intent.getStringExtra("SONG_ARTIST")}")
                     val title = intent.getStringExtra("SONG_TITLE") ?: ""
                     val artist = intent.getStringExtra("SONG_ARTIST") ?: ""
                     lastTitle = title
                     lastArtist = artist
-                    val updateIntent = Intent("com.adamthiede.inkmusic.UPDATE_NOW_PLAYING").apply {
+                    val updateIntent = Intent(UPDATE_NOW_PLAYING).apply {
                         putExtra("SONG_TITLE", title)
                         putExtra("SONG_ARTIST", artist)
                     }
